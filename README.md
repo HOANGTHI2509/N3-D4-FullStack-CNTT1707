@@ -1,4 +1,5 @@
-# 🎓 Hệ thống Quản lý Khóa học & Học viên Trung tâm (Kế hoạch dự kiến cần chỉnh sửa thêm)
+# 🎓 Hệ thống Quản lý Khóa học & Học viên Trung tâm 
+(Kế hoạch dự kiến cần chỉnh sửa thêm)
 
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core_8-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![SQL Server](https://img.shields.io/badge/SQL_Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
