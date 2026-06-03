@@ -27,7 +27,7 @@ Chuẩn bị "bộ khung" vững chắc để các thành viên khác có thể 
 ## 4. Quản lý Repository, Review Code & Workflow
 Thiết lập môi trường làm việc chung cho cả team.
 
-- [ ] **Task 4.1: Setup Git Repository:** Tạo repo trên GitHub/GitLab, thêm file `.gitignore` phù hợp với Tech Stack, thêm file `README.md` cơ bản.
-- [ ] **Task 4.2: Thống nhất Git Workflow:** Lên quy định về cách tạo nhánh (VD: `feature/...`, `bugfix/...`) và cách viết Commit Message (VD: Conventional Commits).
-- [ ] **Task 4.3: Thiết lập Branch Protection:** Cấu hình chặn push trực tiếp lên nhánh `main`/`develop`. Yêu cầu bắt buộc tạo Pull Request (PR) và phải có người Review trước khi merge.
-- [ ] **Task 4.4: Phân quyền thành viên:** Mời các thành viên vào repository và set quyền phù hợp.
+- [x] **Task 4.1: Setup Git Repository:** Tạo repo trên GitHub/GitLab, thêm file `.gitignore` phù hợp với Tech Stack, thêm file `README.md` cơ bản.
+- [x] **Task 4.2: Thống nhất Git Workflow:** Lên quy định về cách tạo nhánh (VD: `feature/...`, `bugfix/...`) và cách viết Commit Message (VD: Conventional Commits).
+- [x] **Task 4.3: Thiết lập Branch Protection:** Cấu hình chặn push trực tiếp lên nhánh `main`/`develop`. Yêu cầu bắt buộc tạo Pull Request (PR) và phải có người Review trước khi merge.
+- [x] **Task 4.4: Phân quyền thành viên:** Mời các thành viên vào repository và set quyền phù hợp.

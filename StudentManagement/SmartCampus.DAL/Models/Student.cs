@@ -7,6 +7,8 @@ public partial class Student
 {
     public int Id { get; set; }
 
+    public int? UserId { get; set; }
+
     public string StudentCode { get; set; } = null!;
 
     public string? IdentityCardNumber { get; set; }
@@ -35,7 +37,9 @@ public partial class Student
 
     public DateTime? UpdatedAt { get; set; }
 
-    public int? AccountId { get; set; }
+    public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
 
-    public virtual Account? Account { get; set; }
+    public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+
+    public virtual ICollection<Grade> Grades { get; set; } = new List<Grade>();
 }

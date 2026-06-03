@@ -15,11 +15,11 @@ public partial class N3D4StudentMgmtContext : DbContext
     {
     }
 
-    public virtual DbSet<Account> Accounts { get; set; }
+    public virtual DbSet<Attendance> Attendances { get; set; }
 
-    public virtual DbSet<Class> Classes { get; set; }
+    public virtual DbSet<Enrollment> Enrollments { get; set; }
 
-    public virtual DbSet<Course> Courses { get; set; }
+    public virtual DbSet<Grade> Grades { get; set; }
 
     public virtual DbSet<Student> Students { get; set; }
 
@@ -28,70 +28,66 @@ public partial class N3D4StudentMgmtContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Account>(entity =>
+        modelBuilder.Entity<Attendance>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Accounts__3214EC07C7ABF3F5");
+            entity.HasKey(e => e.Id).HasName("PK__Attendan__3214EC07B69B7439");
 
-            entity.HasIndex(e => e.Username, "UQ__Accounts__536C85E4317BA485").IsUnique();
+            entity.Property(e => e.Note).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(50);
 
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.IsActive).HasDefaultValue(true);
-            entity.Property(e => e.Role)
-                .HasMaxLength(20)
-                .HasDefaultValue("Student");
-            entity.Property(e => e.Username)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.HasOne(d => d.Student).WithMany(p => p.Attendances)
+                .HasForeignKey(d => d.StudentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Attendanc__Stude__59FA5E80");
         });
 
-        modelBuilder.Entity<Class>(entity =>
+        modelBuilder.Entity<Enrollment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Classes__3214EC07313ADF13");
+            entity.HasKey(e => e.Id).HasName("PK__Enrollme__3214EC07E6CF93B1");
 
-            entity.Property(e => e.ClassName).HasMaxLength(100);
-            entity.Property(e => e.CreatedAt)
+            entity.HasIndex(e => new { e.StudentId, e.ClassId }, "UC_Student_Class").IsUnique();
+
+            entity.Property(e => e.EnrollmentDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.MaxStudents).HasDefaultValue(40);
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
-                .HasDefaultValue("Đang mở");
+                .HasDefaultValue("Đang học");
 
-            entity.HasOne(d => d.Course).WithMany(p => p.Classes)
-                .HasForeignKey(d => d.CourseId)
+            entity.HasOne(d => d.Student).WithMany(p => p.Enrollments)
+                .HasForeignKey(d => d.StudentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Classes__CourseI__6477ECF3");
+                .HasConstraintName("FK__Enrollmen__Stude__571DF1D5");
         });
 
-        modelBuilder.Entity<Course>(entity =>
+        modelBuilder.Entity<Grade>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Courses__3214EC0798537CA8");
+            entity.HasKey(e => e.Id).HasName("PK__Grades__3214EC0793981383");
 
-            entity.HasIndex(e => e.CourseCode, "UQ__Courses__FC00E000569E837C").IsUnique();
-
-            entity.Property(e => e.CourseCode)
-                .HasMaxLength(20)
-                .IsUnicode(false);
-            entity.Property(e => e.CourseName).HasMaxLength(150);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Credits).HasDefaultValue(0);
+            entity.Property(e => e.GradeType).HasMaxLength(50);
+            entity.Property(e => e.Note).HasMaxLength(255);
+            entity.Property(e => e.Score).HasColumnType("decimal(5, 2)");
+
+            entity.HasOne(d => d.Student).WithMany(p => p.Grades)
+                .HasForeignKey(d => d.StudentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Grades__StudentI__5EBF139D");
         });
 
         modelBuilder.Entity<Student>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Students__3214EC074BC079E8");
+            entity.HasKey(e => e.Id).HasName("PK__Students__3214EC073045B2E3");
 
-            entity.HasIndex(e => e.StudentCode, "UQ__Students__1FC88604C98AF5EE").IsUnique();
+            entity.HasIndex(e => e.UserId, "UQ__Students__1788CC4D414D7BD2").IsUnique();
 
-            entity.HasIndex(e => e.AccountId, "UQ__Students__349DA5A74AA174BF").IsUnique();
+            entity.HasIndex(e => e.StudentCode, "UQ__Students__1FC886041A4082C8").IsUnique();
 
-            entity.HasIndex(e => e.IdentityCardNumber, "UQ__Students__59CD512166976418").IsUnique();
+            entity.HasIndex(e => e.IdentityCardNumber, "UQ__Students__59CD51219947A227").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__Students__A9D10534375B32D7").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Students__A9D1053478964127").IsUnique();
 
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.CreatedAt)
@@ -119,10 +115,6 @@ public partial class N3D4StudentMgmtContext : DbContext
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-
-            entity.HasOne(d => d.Account).WithOne(p => p.Student)
-                .HasForeignKey<Student>(d => d.AccountId)
-                .HasConstraintName("FK_Students_Accounts");
         });
 
         OnModelCreatingPartial(modelBuilder);
