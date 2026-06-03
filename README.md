@@ -10,7 +10,7 @@ Dự án được xây dựng dưới dạng **Full-stack (bao gồm cả Web Ad
 
 ---
 
-## 👥 Đội ngũ thực hiện (Nhóm 3)
+## 👥 Đội ngũ thực hiện (Nhóm 2)
 - 👨‍💻 **Hoàng Văn Thi** (Trưởng nhóm) - *Data Architect & Core API*
 - 👨‍💻 **Nguyễn Văn Thuyết** - *Business Logic API*
 - 👨‍💻 **Ngọc Minh Kiên** - *DevOps & Integration*
@@ -35,7 +35,7 @@ Tuân thủ nghiêm ngặt quy tắc **"Nhánh độc lập - Tích hợp liên 
 | :--- | :--- | :--- |
 | **Hoàng Văn Thi** *(Team Leader)* | **Data Architect & Core API** | - Thiết kế Database SQL Server (Sơ đồ ERD chuẩn).<br>- Khởi tạo cấu trúc Project ban đầu.<br>- Xây dựng API cốt lõi: CRUD Hồ sơ học viên, API tra cứu thông tin cá nhân (phục vụ App).<br>- Quản lý Repository, review code và xử lý Conflict khi merge. |
 | **Nguyễn Văn Thuyết** | **Business Logic API** | - Xây dựng API nghiệp vụ phức tạp: Đăng ký khóa học, Điểm danh (theo buổi/theo mã QR), Nhập điểm.<br>- Viết logic tính toán: Tỷ lệ % chuyên cần, điểm trung bình.<br>- Viết Unit Test cơ bản cho các luồng logic khó. |
-| **Ngọc Minh Kiên** | **DevOps & Integration** | - Đóng gói Service vào Docker Container (chạy DB + API bằng 1 lệnh).<br>- Cấu hình JWT Auth để phân quyền (Admin, Học viên, Giáo viên).<br>- Cấu hình Ocelot API Gateway và nghiên cứu SignalR để thông báo đẩy (Real-time) về Mobile App. |
+| **Ngọc Minh Kiên** | **DevOps & Integration** | - Đóng gói Service vào Docker Container.<br>- Xác thực JWT Auth (Validation - không cấp phát) do Nhóm 3 cấp để phân quyền.<br>- Cấu hình Ocelot API Gateway và nghiên cứu SignalR. |
 
 ### 3. Lộ trình thực hiện (Roadmap)
 - **Giai đoạn 1 (Thiết kế & Base Project):** Chốt cấu trúc Database (Thi) và đẩy khung Project chuẩn lên nhánh `dev`.
@@ -50,4 +50,4 @@ Tuân thủ nghiêm ngặt quy tắc **"Nhánh độc lập - Tích hợp liên 
 ## 💡 Các nguyên tắc cốt lõi trong phát triển
 1. **Dùng chung Model/DTO tối ưu cho Mobile App:** Dữ liệu trả về cho App phải được tối ưu, đóng gói gọi nhẹ qua DTO (chỉ lấy những trường cần thiết), tránh bắt App phải load toàn bộ dữ liệu cồng kềnh của Web.
 2. **Không Query vượt cấp:** API của ai người nấy viết, dùng chung DB context nhưng tuyệt đối tuân thủ nguyên tắc SOLID.
-3. **Dữ liệu độc lập (Microservices):** Tuyệt đối không truy vấn chéo vào Database của các service khác. Luồng giao tiếp phải thông qua API Gateway hoặc Message Broker.
+3. **Dữ liệu độc lập (Microservices):** Tuyệt đối không lưu dư thừa bảng của service khác (VD: Không lưu Accounts của N3, không lưu Courses của N1). Mọi giao tiếp phải thông qua API Gateway, HTTP Client hoặc RabbitMQ.
