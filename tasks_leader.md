@@ -5,10 +5,10 @@
 ## 1. Thiết kế Database SQL Server (Sơ đồ ERD)
 Đây là công việc ưu tiên số 1 vì nó là xương sống của toàn hệ thống.
 
-- [ ] **Task 1.1: Gom nhặt yêu cầu dữ liệu:** Xác định chính xác "Hồ sơ học viên" và "Thông tin cá nhân" cần lưu trữ những trường thông tin gì (Mã HV, Tên, Ngày sinh, Căn cước, Địa chỉ, Trạng thái học tập, v.v.).
-- [ ] **Task 1.2: Xác định các thực thể (Entities) và Mối quan hệ (Relationships):** Ngoài học viên, xác định các bảng liên kết (Ví dụ: Lớp học, Khóa học, Điểm số, Tài khoản đăng nhập). Xác định quan hệ 1-1, 1-N, N-N.
-- [ ] **Task 1.3: Chốt kiểu dữ liệu và Ràng buộc:** Lên danh sách kiểu dữ liệu tương ứng trong SQL Server (NVARCHAR, DATE, INT, UNIQUEIDENTIFIER, v.v.), chỉ định Khóa chính (PK) và Khóa ngoại (FK).
-- [ ] **Task 1.4: Vẽ sơ đồ ERD:** Sử dụng một công cụ như `dbdiagram.io`, `draw.io` hoặc `Visual Paradigm` để vẽ sơ đồ trực quan. Sơ đồ này cần được chốt với team trước khi tạo database vật lý.
+- [x] **Task 1.1: Gom nhặt yêu cầu dữ liệu:** Xác định chính xác "Hồ sơ học viên" và "Thông tin cá nhân" cần lưu trữ những trường thông tin gì (Mã HV, Tên, Ngày sinh, Căn cước, Địa chỉ, Trạng thái học tập, v.v.).
+- [x] **Task 1.2: Xác định các thực thể (Entities) và Mối quan hệ (Relationships):** Ngoài học viên, xác định các bảng liên kết (Ví dụ: Lớp học, Khóa học, Điểm số, Tài khoản đăng nhập). Xác định quan hệ 1-1, 1-N, N-N.
+- [x] **Task 1.3: Chốt kiểu dữ liệu và Ràng buộc:** Lên danh sách kiểu dữ liệu tương ứng trong SQL Server (NVARCHAR, DATE, INT, UNIQUEIDENTIFIER, v.v.), chỉ định Khóa chính (PK) và Khóa ngoại (FK).
+- [x] **Task 1.4: Vẽ sơ đồ ERD:** Sử dụng một công cụ như `dbdiagram.io`, `draw.io` hoặc `Visual Paradigm` để vẽ sơ đồ trực quan. Sơ đồ này cần được chốt với team trước khi tạo database vật lý.
 
 ## 2. Khởi tạo cấu trúc Project ban đầu
 Chuẩn bị "bộ khung" vững chắc để các thành viên khác có thể bắt đầu làm việc.
