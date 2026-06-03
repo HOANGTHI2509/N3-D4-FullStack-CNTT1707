@@ -9,9 +9,9 @@
 - [ ] **Task 1.3: Cấu hình biến môi trường (.env):** Tách biệt các chuỗi kết nối, config nhạy cảm ra khỏi source code để dễ dàng deploy qua các môi trường khác nhau.
 
 ## 2. Bảo mật và Xác thực (JWT Auth)
-- [ ] **Task 2.1: Implement JWT Service:** Tích hợp logic sinh Token (Access Token, Refresh Token) khi User/Học viên đăng nhập.
-- [ ] **Task 2.2: Cấu hình Role-based Authorization:** Phân quyền rõ ràng (Admin, Học viên, Giáo viên) trên các API route cụ thể.
-- [ ] **Task 2.3: Bảo vệ API Endpoints:** Test thử việc gắn middleware xác thực vào các controller xem có block thành công các request trái phép hay không.
+- [ ] **Task 2.1: Tích hợp JWT Validation:** Cấu hình Middleware để xác thực Token (Validate JWT) do Nhóm 3 (Payment & Report Service) cấp phát. KHÔNG code tính năng Login.
+- [ ] **Task 2.2: Cấu hình Role-based Authorization:** Phân quyền rõ ràng (Admin, Học viên, Giáo viên) trên các API route cụ thể dựa trên Role trong Token.
+- [ ] **Task 2.3: Bảo vệ API Endpoints:** Gắn `[Authorize]` vào các controller/action và test thử xem có block thành công các request trái phép hay không.
 
 ## 3. Cấu hình API Gateway (Ocelot)
 - [ ] **Task 3.1: Khởi tạo Project API Gateway:** Cài đặt và cấu hình Ocelot (nếu dùng .NET) hoặc Kong/Nginx.
