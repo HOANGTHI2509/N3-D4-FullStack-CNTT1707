@@ -1,25 +1,22 @@
 # Phân rã công việc cho Backend Developer (Nguyễn Văn Thuyết)
 
-> **Vai trò:** Business Logic API
-> **Nhiệm vụ trọng tâm:** Xử lý các luồng nghiệp vụ lõi, tính toán và đảm bảo tính chính xác của dữ liệu.
+> **Vai trò:** Business Logic API (Nghiệp vụ cốt lõi)
+> **Nhiệm vụ trọng tâm:** Xử lý các luồng đăng ký học, điểm danh, nhập điểm và tích hợp sự kiện (Event-driven).
 
-## 1. Chuẩn bị & Hiểu nghiệp vụ
-- [ ] **Task 1.1: Nghiên cứu DB Schema:** Phối hợp cùng Team Leader (Thi) để hiểu rõ cấu trúc Database (đặc biệt là bảng Điểm số, Lịch học, Điểm danh).
-- [ ] **Task 1.2: Phân tích luồng Đăng ký khóa học:** Xác định các bước khi một học viên đăng ký (Kiểm tra điều kiện tiên quyết, số lượng tối đa, cập nhật trạng thái hóa đơn/học phí nếu có).
-- [ ] **Task 1.3: Phân tích luồng Điểm danh & Nhập điểm:** Thống nhất cách lưu trữ trạng thái điểm danh (Có mặt, Vắng phép, Vắng không phép) và thang điểm.
+## 1. API Đăng ký khóa học (Enrollments)
+- [ ] **Task 1.1:** Viết API cho phép học viên đăng ký vào một lớp (`POST /api/v1/enrollments`). Đảm bảo kiểm tra trùng lặp dữ liệu (Một người không đăng ký 1 lớp 2 lần).
+- [ ] **Task 1.2:** Viết API hủy đăng ký (Rút học phần) cho phép thay đổi trạng thái.
+- [ ] **Task 1.3:** Viết API lấy danh sách học viên của một lớp cụ thể (để cung cấp cho giáo viên xem).
 
-## 2. Xây dựng API Nghiệp vụ
-- [ ] **Task 2.1: API Đăng ký khóa học:** Viết endpoint cho phép học viên đăng ký khóa học, bao gồm các validation logic.
-- [ ] **Task 2.2: API Điểm danh:** 
-  - Điểm danh thủ công theo buổi.
-  - Xử lý logic điểm danh bằng mã QR (nếu có yêu cầu từ App).
-- [ ] **Task 2.3: API Nhập điểm:** Cho phép giảng viên/admin nhập điểm và tự động tính toán cập nhật vào bảng tổng hợp.
+## 2. API Điểm danh (Attendances)
+- [ ] **Task 2.1:** Viết API điểm danh hàng loạt cho một lớp trong một ngày (`POST /api/v1/attendances`).
+- [ ] **Task 2.2:** Viết logic tính toán **Tỷ lệ % chuyên cần** của một học viên trong một lớp (`GET /api/v1/attendances/summary/{studentId}`).
+- [ ] **Task 2.3 (Tương lai/Nâng cao):** Tích hợp luồng điểm danh bằng mã QR (Sinh mã QR chứa thông tin buổi học trên web và thiết kế API xử lý khi App quét mã).
 
-## 3. Xử lý Logic Tính Toán
-- [ ] **Task 3.1: Viết logic tính tỷ lệ chuyên cần:** Tạo service riêng tính toán số buổi vắng / tổng số buổi, cảnh báo nếu vượt quá % cho phép.
-- [ ] **Task 3.2: Viết logic tính điểm trung bình (GPA):** Viết service tính toán GPA tự động dựa trên trọng số các bài kiểm tra.
+## 3. API Điểm số (Grades)
+- [ ] **Task 3.1:** Viết API nhập điểm (giữa kỳ, cuối kỳ) cho học viên (`POST /api/v1/grades`).
+- [ ] **Task 3.2:** Viết logic tính Điểm trung bình môn (GPA) tự động trả về khi tra cứu.
 
-## 4. Kiểm thử chất lượng (Unit Test)
-- [ ] **Task 4.1: Setup Unit Test framework:** Cài đặt xUnit/NUnit/Moq (nếu dùng C#) hoặc Jest (nếu dùng Node.js).
-- [ ] **Task 4.2: Viết Unit Test cho luồng Điểm danh:** Đảm bảo không thể điểm danh 2 lần, hoặc điểm danh khi buổi học chưa diễn ra.
-- [ ] **Task 4.3: Viết Unit Test cho luồng Tính điểm/Chuyên cần:** Đảm bảo phép toán cho ra kết quả chính xác với nhiều edge-cases khác nhau.
+## 4. Giao tiếp liên dịch vụ (Cross-Service Communication - Định hướng tương lai)
+- [ ] **Task 4.1 (Event-Driven):** Phối hợp với Kiên cài đặt **RabbitMQ**. Viết Consumer để lắng nghe sự kiện `class.opened` từ Nhóm 1. Khi Nhóm 1 mở lớp mới, lưu thông tin ID của lớp đó về DB Nhóm 2.
+- [ ] **Task 4.2 (Synchronous API):** Viết HTTP Client (hoặc gRPC) gọi sang API của Nhóm 1 để lấy "Tên Khóa học" hiển thị cho App học viên (vì DB Nhóm 2 chỉ lưu `ClassId`).
