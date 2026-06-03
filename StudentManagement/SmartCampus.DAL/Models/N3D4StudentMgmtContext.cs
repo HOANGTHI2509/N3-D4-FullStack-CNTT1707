@@ -15,6 +15,8 @@ public partial class N3D4StudentMgmtContext : DbContext
     {
     }
 
+    public virtual DbSet<Account> Accounts { get; set; }
+
     public virtual DbSet<Class> Classes { get; set; }
 
     public virtual DbSet<Course> Courses { get; set; }
@@ -26,6 +28,24 @@ public partial class N3D4StudentMgmtContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Accounts__3214EC07C7ABF3F5");
+
+            entity.HasIndex(e => e.Username, "UQ__Accounts__536C85E4317BA485").IsUnique();
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.Role)
+                .HasMaxLength(20)
+                .HasDefaultValue("Student");
+            entity.Property(e => e.Username)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Class>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Classes__3214EC07313ADF13");
@@ -67,6 +87,8 @@ public partial class N3D4StudentMgmtContext : DbContext
 
             entity.HasIndex(e => e.StudentCode, "UQ__Students__1FC88604C98AF5EE").IsUnique();
 
+            entity.HasIndex(e => e.AccountId, "UQ__Students__349DA5A74AA174BF").IsUnique();
+
             entity.HasIndex(e => e.IdentityCardNumber, "UQ__Students__59CD512166976418").IsUnique();
 
             entity.HasIndex(e => e.Email, "UQ__Students__A9D10534375B32D7").IsUnique();
@@ -97,6 +119,10 @@ public partial class N3D4StudentMgmtContext : DbContext
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Account).WithOne(p => p.Student)
+                .HasForeignKey<Student>(d => d.AccountId)
+                .HasConstraintName("FK_Students_Accounts");
         });
 
         OnModelCreatingPartial(modelBuilder);
