@@ -1,0 +1,242 @@
+openapi: 3.0.3
+info:
+  title: Smart Campus - Core Business API (B6)
+  description: API phục vụ quản lý hồ sơ học viên, điểm danh và tra cứu điểm số.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Local Development Server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    StudentResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Thành công"
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+            studentCode:
+              type: string
+            fullName:
+              type: string
+            email:
+              type: string
+            status:
+              type: string
+
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+        errors:
+          type: array
+          items:
+            type: string
+
+security:
+  - bearerAuth: []
+
+paths:
+  /api/v1/students:
+    get:
+      summary: Lấy danh sách học viên
+      tags: [Admin - Students]
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Danh sách học viên
+    
+    post:
+      summary: Thêm mới học viên
+      tags: [Admin - Students]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: Đã tạo học viên thành công
+
+  /api/v1/students/{id}:
+    get:
+      summary: Lấy thông tin chi tiết 1 học viên
+      tags: [Admin - Students]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Chi tiết học viên
+          
+    put:
+      summary: Cập nhật thông tin học viên
+      tags: [Admin - Students]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Đã cập nhật
+          
+    delete:
+      summary: Xóa (bảo lưu) học viên
+      tags: [Admin - Students]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Đã xóa mềm
+
+  /api/v1/students/{id}/status:
+    patch:
+      summary: Đổi nhanh trạng thái học viên
+      tags: [Admin - Students]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "Đình chỉ"
+      responses:
+        '200':
+          description: Đã đổi trạng thái
+
+  /api/v1/students/{id}/avatar:
+    post:
+      summary: Upload ảnh thẻ học viên
+      tags: [Admin - Students]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Upload thành công
+
+  /api/v1/students/import-excel:
+    post:
+      summary: Import danh sách học viên từ Excel
+      tags: [Admin - Students]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Import thành công
+          
+  /api/v1/students/export-excel:
+    get:
+      summary: Xuất danh sách học viên ra Excel
+      tags: [Admin - Students]
+      responses:
+        '200':
+          description: Trả về file Excel (.xlsx)
+
+  /api/v1/students/me:
+    get:
+      summary: Lấy thông tin cá nhân (Dành cho App)
+      tags: [App - My Profile]
+      responses:
+        '200':
+          description: Chi tiết học viên đang đăng nhập
+
+  /api/v1/students/me/classes:
+    get:
+      summary: Xem lịch học/lớp đang học (Dành cho App)
+      tags: [App - My Profile]
+      responses:
+        '200':
+          description: Danh sách lớp học
+          
+  /api/v1/students/me/attendances:
+    get:
+      summary: Xem lịch sử điểm danh cá nhân
+      tags: [App - My Profile]
+      responses:
+        '200':
+          description: Báo cáo chuyên cần
+
+  /api/v1/students/me/grades:
+    get:
+      summary: Xem bảng điểm cá nhân
+      tags: [App - My Profile]
+      responses:
+        '200':
+          description: Bảng điểm

@@ -13,16 +13,16 @@
 ## 2. Khởi tạo cấu trúc Project ban đầu
 Chuẩn bị "bộ khung" vững chắc để các thành viên khác có thể bắt đầu làm việc.
 
-- [ ] **Task 2.1: Chốt Tech Stack & Kiến trúc:** Thống nhất framework backend (ASP.NET Core, Node.js, Spring Boot...) và kiến trúc phần mềm (MVC, Layered Architecture, Clean Architecture).
-- [ ] **Task 2.2: Lên danh sách thư viện cốt lõi (Dependencies):** Xác định trước các package ORM (Entity Framework, Dapper...), thư viện xác thực (JWT), thư viện Logging.
-- [ ] **Task 2.3: Viết tài liệu Coding Convention:** Tạo tài liệu quy định cách đặt tên biến, tên hàm, tên API, cách xử lý lỗi (try/catch), format response trả về để thống nhất trong team.
+- [x] **Task 2.1: Chốt Tech Stack & Kiến trúc:** Thống nhất framework backend (ASP.NET Core, Node.js, Spring Boot...) và kiến trúc phần mềm (MVC, Layered Architecture, Clean Architecture).
+- [x] **Task 2.2: Lên danh sách thư viện cốt lõi (Dependencies):** Xác định trước các package ORM (Entity Framework, Dapper...), thư viện xác thực (JWT), thư viện Logging.
+- [x] **Task 2.3: Viết tài liệu Coding Convention:** Tạo tài liệu quy định cách đặt tên biến, tên hàm, tên API, cách xử lý lỗi (try/catch), format response trả về để thống nhất trong team.
 
 ## 3. Chuẩn bị Xây dựng API cốt lõi
 Áp dụng cách tiếp cận API-First, thiết kế API trước khi implement.
 
-- [ ] **Task 3.1: Định nghĩa danh sách Endpoints:** Lên danh sách các URL cần thiết (VD: `GET /api/v1/students`, `POST /api/v1/students`, `GET /api/v1/students/{id}`).
-- [ ] **Task 3.2: Thiết kế Request/Response Schema:** Xác định rõ cấu trúc JSON gửi lên và cấu trúc JSON trả về (bao gồm cả mã lỗi HTTP).
-- [ ] **Task 3.3: Viết tài liệu OpenAPI/Swagger (API Contract):** Viết file `swagger.yaml` hoặc `openapi.json` nháp. Việc này tạo Mock API để team App/Frontend làm giao diện ngay mà không cần chờ Backend code xong.
+- [x] **Task 3.1: Định nghĩa danh sách Endpoints:** Lên danh sách các URL cần thiết (VD: `GET /api/v1/students`, `POST /api/v1/students`, `GET /api/v1/students/{id}`).
+- [x] **Task 3.2: Thiết kế Request/Response Schema:** Xác định rõ cấu trúc JSON gửi lên và cấu trúc JSON trả về (bao gồm cả mã lỗi HTTP).
+- [x] **Task 3.3: Viết tài liệu OpenAPI/Swagger (API Contract):** Viết file `swagger.yaml` hoặc `openapi.json` nháp. Việc này tạo Mock API để team App/Frontend làm giao diện ngay mà không cần chờ Backend code xong.
 
 ## 4. Quản lý Repository, Review Code & Workflow
 Thiết lập môi trường làm việc chung cho cả team.

@@ -34,4 +34,8 @@ public partial class Student
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+
+    public int? AccountId { get; set; }
+
+    public virtual Account? Account { get; set; }
 }
