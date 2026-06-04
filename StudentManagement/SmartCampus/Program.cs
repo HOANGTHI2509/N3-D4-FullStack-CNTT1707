@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using SmartCampus.BLL.Services;
 using SmartCampus.DAL.Models;
+using SmartCampus.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,8 @@ builder.Services.AddSwaggerGen();
 // Cấu hình Database Context
 builder.Services.AddDbContext<N3D4StudentMgmtContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 
 var app = builder.Build();
 
