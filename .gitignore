@@ -6,3 +6,4 @@ obj/
 # User files
 *.user
 *.suo
+.env
