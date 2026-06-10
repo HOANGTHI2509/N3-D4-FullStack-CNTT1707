@@ -38,4 +38,28 @@ public class GradesController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<bool>.Fail(ex.Message));
         }
     }
+
+    [HttpPost]
+    public async Task<ActionResult<ApiResponse<bool>>> CreateGrade([FromBody] object request)
+    {
+        return Ok(ApiResponse<bool>.Ok(true, "Mock data"));
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<ApiResponse<bool>>> UpdateGrade(int id, [FromBody] object request)
+    {
+        return Ok(ApiResponse<bool>.Ok(true, "Mock data"));
+    }
+
+    [HttpGet("classes/{classId}")]
+    public async Task<ActionResult<ApiResponse<object>>> GetGradesByClass(int classId)
+    {
+        return Ok(ApiResponse<object>.Ok(new { }, "Mock data"));
+    }
+
+    [HttpGet("students/{studentId}/classes/{classId}")]
+    public async Task<ActionResult<ApiResponse<object>>> GetGradesByStudentAndClass(int studentId, int classId)
+    {
+        return Ok(ApiResponse<object>.Ok(new { }, "Mock data"));
+    }
 }

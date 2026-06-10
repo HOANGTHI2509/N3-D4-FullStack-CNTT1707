@@ -17,15 +17,23 @@ public class AttendancesController : ControllerBase
     }
 
     /// <summary>
-    /// Gửi danh sách điểm danh cho một buổi học và tự động tính lại % chuyên cần
+    /// Tạo mới một điểm danh
     /// </summary>
     [HttpPost]
+    public async Task<ActionResult<ApiResponse<bool>>> CreateAttendance([FromBody] object request)
+    {
+        return Ok(ApiResponse<bool>.Ok(true, "Mock data"));
+    }
+
+    /// <summary>
+    /// Gửi danh sách điểm danh cho một buổi học và tự động tính lại % chuyên cần
+    /// </summary>
+    [HttpPost("bulk")]
     public async Task<ActionResult<ApiResponse<bool>>> SubmitAttendance([FromBody] SubmitAttendanceRequest request)
     {
         try
         {
             var result = await _attendanceService.SubmitAttendanceAsync(request);
-
             return result.Type switch
             {
                 ServiceResultType.Success => Ok(ApiResponse<bool>.Ok(result.Data, result.Message)),
@@ -37,5 +45,29 @@ public class AttendancesController : ControllerBase
         {
             return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<bool>.Fail(ex.Message));
         }
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<ApiResponse<bool>>> UpdateAttendance(int id, [FromBody] object request)
+    {
+        return Ok(ApiResponse<bool>.Ok(true, "Mock data"));
+    }
+
+    [HttpGet("classes/{classId}")]
+    public async Task<ActionResult<ApiResponse<object>>> GetAttendancesByClass(int classId)
+    {
+        return Ok(ApiResponse<object>.Ok(new { }, "Mock data"));
+    }
+
+    [HttpGet("students/{studentId}/classes/{classId}")]
+    public async Task<ActionResult<ApiResponse<object>>> GetAttendancesByStudentAndClass(int studentId, int classId)
+    {
+        return Ok(ApiResponse<object>.Ok(new { }, "Mock data"));
+    }
+
+    [HttpGet("summary/students/{studentId}/classes/{classId}")]
+    public async Task<ActionResult<ApiResponse<object>>> GetAttendanceSummary(int studentId, int classId)
+    {
+        return Ok(ApiResponse<object>.Ok(new { }, "Mock data"));
     }
 }
