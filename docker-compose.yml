@@ -36,7 +36,7 @@ services:
   # 3. Backend API Core
   api:
     build: 
-      context: .
+      context: ./StudentManagement
       dockerfile: SmartCampus/Dockerfile  # Trỏ đích danh vào file Dockerfile
     container_name: smartcampus_api
     depends_on:
