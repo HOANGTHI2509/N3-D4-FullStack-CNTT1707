@@ -12,12 +12,32 @@ public class StudentRepository : IStudentRepository
         _context = context;
     }
 
-    public async Task<IReadOnlyList<Student>> GetAllAsync()
+    public async Task<IReadOnlyList<Student>> GetPagedAsync(int page, int pageSize, string? searchTerm)
     {
-        return await _context.Students
-            .AsNoTracking()
+        var query = _context.Students.AsNoTracking().Where(s => !s.IsDeleted);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(s => s.FullName.Contains(searchTerm) || s.StudentCode.Contains(searchTerm));
+        }
+
+        return await query
             .OrderByDescending(s => s.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+    }
+
+    public async Task<int> GetTotalCountAsync(string? searchTerm)
+    {
+        var query = _context.Students.Where(s => !s.IsDeleted);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(s => s.FullName.Contains(searchTerm) || s.StudentCode.Contains(searchTerm));
+        }
+
+        return await query.CountAsync();
     }
 
     public Task<Student?> GetByIdAsync(int id)
@@ -45,10 +65,7 @@ public class StudentRepository : IStudentRepository
         _context.Students.Update(student);
     }
 
-    public void Delete(Student student)
-    {
-        _context.Students.Remove(student);
-    }
+
 
     public async Task SaveChangesAsync()
     {

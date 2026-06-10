@@ -47,6 +47,11 @@ public class EnrollmentRepository : IEnrollmentRepository
         await _context.Enrollments.AddAsync(enrollment);
     }
 
+    public void Update(Enrollment enrollment)
+    {
+        _context.Enrollments.Update(enrollment);
+    }
+
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();

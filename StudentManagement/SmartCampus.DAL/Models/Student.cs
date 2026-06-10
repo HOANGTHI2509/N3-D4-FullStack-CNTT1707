@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace SmartCampus.DAL.Models;
@@ -42,4 +42,6 @@ public partial class Student
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 
     public virtual ICollection<Grade> Grades { get; set; } = new List<Grade>();
+
+    public bool IsDeleted { get; set; } = false;
 }

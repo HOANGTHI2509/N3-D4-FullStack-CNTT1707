@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SmartCampus.BLL.DTOs;
 using SmartCampus.BLL.DTOs.Students;
 using SmartCampus.BLL.Services;
 using SmartCampus.Models;
@@ -17,14 +18,23 @@ public class StudentsController : ControllerBase
     }
 
     /// <summary>
-    /// Lấy danh sách toàn bộ học viên
+    /// Lấy danh sách học viên có phân trang và tìm kiếm
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<IReadOnlyList<StudentResponse>>>> GetAll()
+    public async Task<ActionResult<ApiResponse<PagedResponse<StudentResponse>>>> GetPaged(
+        [FromQuery] int page = 1, 
+        [FromQuery] int pageSize = 10, 
+        [FromQuery] string? searchTerm = null)
     {
-        var result = await _studentService.GetAllAsync();
-        
-        return Ok(ApiResponse<IReadOnlyList<StudentResponse>>.Ok(result.Data!, "Lấy danh sách học viên thành công."));
+        try
+        {
+            var result = await _studentService.GetPagedAsync(page, pageSize, searchTerm);
+            return Ok(ApiResponse<PagedResponse<StudentResponse>>.Ok(result.Data!, result.Message));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<PagedResponse<StudentResponse>>.Fail(ex.Message));
+        }
     }
 
     /// <summary>
@@ -33,14 +43,21 @@ public class StudentsController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ApiResponse<StudentResponse>>> GetById(int id)
     {
-        var result = await _studentService.GetByIdAsync(id);
-
-        return result.Type switch
+        try
         {
-            ServiceResultType.Success => Ok(ApiResponse<StudentResponse>.Ok(result.Data!, result.Message)),
-            ServiceResultType.NotFound => NotFound(ApiResponse<StudentResponse>.Fail(result.Message)),
-            _ => StatusCode(StatusCodes.Status500InternalServerError)
-        };
+            var result = await _studentService.GetByIdAsync(id);
+
+            return result.Type switch
+            {
+                ServiceResultType.Success => Ok(ApiResponse<StudentResponse>.Ok(result.Data!, result.Message)),
+                ServiceResultType.NotFound => NotFound(ApiResponse<StudentResponse>.Fail(result.Message)),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<StudentResponse>.Fail("Lỗi hệ thống."))
+            };
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<StudentResponse>.Fail(ex.Message));
+        }
     }
 
     /// <summary>
@@ -49,15 +66,68 @@ public class StudentsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ApiResponse<StudentResponse>>> Create([FromBody] CreateStudentRequest request)
     {
-        var result = await _studentService.CreateAsync(request);
-
-        return result.Type switch
+        try
         {
-            ServiceResultType.Success => StatusCode(
-                StatusCodes.Status201Created,
-                ApiResponse<StudentResponse>.Ok(result.Data!, result.Message)),
-            ServiceResultType.Conflict => Conflict(ApiResponse<StudentResponse>.Fail(result.Message)),
-            _ => StatusCode(StatusCodes.Status500InternalServerError)
-        };
+            var result = await _studentService.CreateAsync(request);
+
+            return result.Type switch
+            {
+                ServiceResultType.Success => StatusCode(
+                    StatusCodes.Status201Created,
+                    ApiResponse<StudentResponse>.Ok(result.Data!, result.Message)),
+                ServiceResultType.Conflict => Conflict(ApiResponse<StudentResponse>.Fail(result.Message)),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<StudentResponse>.Fail("Lỗi hệ thống."))
+            };
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<StudentResponse>.Fail(ex.Message));
+        }
+    }
+
+    /// <summary>
+    /// Cập nhật thông tin học viên
+    /// </summary>
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<ApiResponse<StudentResponse>>> Update(int id, [FromBody] UpdateStudentRequest request)
+    {
+        try
+        {
+            var result = await _studentService.UpdateAsync(id, request);
+
+            return result.Type switch
+            {
+                ServiceResultType.Success => Ok(ApiResponse<StudentResponse>.Ok(result.Data!, result.Message)),
+                ServiceResultType.NotFound => NotFound(ApiResponse<StudentResponse>.Fail(result.Message)),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<StudentResponse>.Fail("Lỗi hệ thống."))
+            };
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<StudentResponse>.Fail(ex.Message));
+        }
+    }
+
+    /// <summary>
+    /// Xóa mềm học viên (Soft Delete)
+    /// </summary>
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult<ApiResponse<bool>>> Delete(int id)
+    {
+        try
+        {
+            var result = await _studentService.DeleteAsync(id);
+
+            return result.Type switch
+            {
+                ServiceResultType.Success => Ok(ApiResponse<bool>.Ok(result.Data, result.Message)),
+                ServiceResultType.NotFound => NotFound(ApiResponse<bool>.Fail(result.Message)),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<bool>.Fail("Lỗi hệ thống."))
+            };
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<bool>.Fail(ex.Message));
+        }
     }
 }
