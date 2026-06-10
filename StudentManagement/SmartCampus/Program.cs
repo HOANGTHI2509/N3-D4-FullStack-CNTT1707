@@ -49,6 +49,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Middleware trích xuất UserId từ Token
+app.UseMiddleware<SmartCampus.Middlewares.UserContextMiddleware>();
+
 app.MapControllers();
 
 app.Run();
