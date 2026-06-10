@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # 1. SQL Server Database
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: smartcampus_db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql # Lưu trữ data để không mất khi restart container
+    networks:
+      - smartcampus_net
+
+  # 2. Service tự động chạy file init.sql
+  db-init:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: smartcampus_db_init
+    depends_on:
+      - db
+    volumes:
+      - ./init.sql:/init.sql # Map file init.sql vào container
+    command: >
+      bash -c "
+      echo 'Đang chờ SQL Server khởi động...' &&
+      sleep 15s && 
+      echo 'Bắt đầu chạy script init.sql...' &&
+      /opt/mssql-tools/bin/sqlcmd -S db -U sa -P ${SA_PASSWORD} -d master -i /init.sql &&
+      echo 'Khởi tạo Database thành công!'"
+    networks:
+      - smartcampus_net
+
+  # 3. Backend API Core
+  api:
+    build: 
+      context: .
+      dockerfile: SmartCampus/Dockerfile  # Trỏ đích danh vào file Dockerfile
+    container_name: smartcampus_api
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
+      - Jwt__Secret=${JWT_SECRET}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+    ports:
+      - "5000:8080" # Map port 5000 ở ngoài máy thật vào port 8080 trong container
+    networks:
+      - smartcampus_net
+
+  # Cập nhật Task 1.3: Message Broker (RabbitMQ)
+  rabbitmq:
+    image: rabbitmq:3-management # Dùng bản management để có sẵn giao diện Web UI
+    container_name: smartcampus_rabbitmq
+    ports:
+      - "5672:5672"   # Port để các Service (API) gọi vào
+      - "15672:15672" # Port để bạn vào web xem dashboard (localhost:15672)
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    networks:
+      - smartcampus_net
+# Khai báo volume và network
+volumes:
+  sql_data:
+
+networks:
+  smartcampus_net:
+    driver: bridge

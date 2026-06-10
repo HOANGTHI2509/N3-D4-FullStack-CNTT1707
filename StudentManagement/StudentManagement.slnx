@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="SmartCampus.BLL.Tests/SmartCampus.BLL.Tests.csproj" />
   <Project Path="SmartCampus.BLL/SmartCampus.BLL.csproj" />
   <Project Path="SmartCampus.DAL/SmartCampus.DAL.csproj" />
   <Project Path="SmartCampus/SmartCampus.csproj" />
