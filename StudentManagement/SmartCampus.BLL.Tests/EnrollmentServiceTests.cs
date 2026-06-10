@@ -24,7 +24,7 @@ public class EnrollmentServiceTests
         });
 
         Assert.Equal(ServiceResultType.Success, result.Type);
-        Assert.Equal("Đang học", result.Data!.Status);
+        Assert.Equal("Dang hoc", result.Data!.Status);
         Assert.Single(repository.Enrollments);
     }
 
@@ -56,7 +56,7 @@ public class EnrollmentServiceTests
             Id = 1,
             StudentId = 1,
             ClassId = 10,
-            Status = "Đang học"
+            Status = "Dang hoc"
         });
         var service = new EnrollmentService(repository);
 
@@ -78,7 +78,7 @@ public class EnrollmentServiceTests
             Id = 1,
             StudentId = 1,
             ClassId = 10,
-            Status = "Đang học"
+            Status = "Dang hoc"
         };
         var repository = new FakeEnrollmentRepository();
         repository.Enrollments.Add(enrollment);
@@ -87,7 +87,7 @@ public class EnrollmentServiceTests
         var result = await service.CancelAsync(1);
 
         Assert.Equal(ServiceResultType.Success, result.Type);
-        Assert.Equal("Đã hủy", enrollment.Status);
+        Assert.Equal("Da huy", enrollment.Status);
     }
 
     private static Student CreateStudent()

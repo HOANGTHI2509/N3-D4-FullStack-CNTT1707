@@ -27,6 +27,7 @@ public class EnrollmentsController : ControllerBase
             ServiceResultType.Success => StatusCode(
                 StatusCodes.Status201Created,
                 ApiResponse<EnrollmentResponse>.Ok(result.Data!, result.Message)),
+            ServiceResultType.BadRequest => BadRequest(ApiResponse<EnrollmentResponse>.Fail(result.Message)),
             ServiceResultType.NotFound => NotFound(ApiResponse<EnrollmentResponse>.Fail(result.Message)),
             ServiceResultType.Conflict => Conflict(ApiResponse<EnrollmentResponse>.Fail(result.Message)),
             _ => StatusCode(StatusCodes.Status500InternalServerError)
@@ -41,6 +42,7 @@ public class EnrollmentsController : ControllerBase
         return result.Type switch
         {
             ServiceResultType.Success => Ok(ApiResponse<EnrollmentResponse>.Ok(result.Data!, result.Message)),
+            ServiceResultType.BadRequest => BadRequest(ApiResponse<EnrollmentResponse>.Fail(result.Message)),
             ServiceResultType.NotFound => NotFound(ApiResponse<EnrollmentResponse>.Fail(result.Message)),
             ServiceResultType.Conflict => Conflict(ApiResponse<EnrollmentResponse>.Fail(result.Message)),
             _ => StatusCode(StatusCodes.Status500InternalServerError)
@@ -55,6 +57,6 @@ public class EnrollmentsController : ControllerBase
 
         return Ok(ApiResponse<IReadOnlyList<ClassStudentResponse>>.Ok(
             students,
-            "Lấy danh sách học viên của lớp thành công."));
+            "Lay danh sach hoc vien cua lop thanh cong."));
     }
 }

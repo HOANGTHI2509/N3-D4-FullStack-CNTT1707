@@ -240,3 +240,151 @@ paths:
       responses:
         '200':
           description: Bảng điểm
+
+  /api/v1/enrollments:
+    post:
+      summary: Dang ky hoc vien vao lop
+      tags: [Business - Enrollments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                studentId:
+                  type: integer
+                  example: 1
+                classId:
+                  type: integer
+                  example: 10
+      responses:
+        '201':
+          description: Dang ky thanh cong
+        '404':
+          description: Khong tim thay hoc vien
+        '409':
+          description: Hoc vien da dang ky lop
+
+  /api/v1/attendances/bulk:
+    post:
+      summary: Diem danh hang loat cho mot lop trong mot ngay
+      tags: [Business - Attendances]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                classId:
+                  type: integer
+                  example: 10
+                attendanceDate:
+                  type: string
+                  format: date
+                  example: "2026-06-10"
+                students:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      studentId:
+                        type: integer
+                        example: 1
+                      status:
+                        type: string
+                        example: "Present"
+                      note:
+                        type: string
+      responses:
+        '201':
+          description: Diem danh hang loat thanh cong
+        '400':
+          description: Du lieu gui len khong hop le
+        '404':
+          description: Khong tim thay hoc vien
+        '409':
+          description: Du lieu bi trung hoac hoc vien chua dang ky lop
+
+  /api/v1/attendances/summary/students/{studentId}/classes/{classId}:
+    get:
+      summary: Tinh ty le phan tram chuyen can cua hoc vien
+      tags: [Business - Attendances]
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: classId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Summary chuyen can
+        '404':
+          description: Khong tim thay hoc vien
+        '409':
+          description: Hoc vien chua dang ky lop
+
+  /api/v1/grades:
+    post:
+      summary: Nhap diem cho hoc vien
+      tags: [Business - Grades]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                studentId:
+                  type: integer
+                  example: 1
+                classId:
+                  type: integer
+                  example: 10
+                gradeType:
+                  type: string
+                  example: "Final"
+                score:
+                  type: number
+                  format: decimal
+                  example: 8.5
+                note:
+                  type: string
+      responses:
+        '200':
+          description: Nhap diem thanh cong
+        '400':
+          description: Diem nam ngoai khoang 0 den 10
+        '404':
+          description: Khong tim thay hoc vien
+        '409':
+          description: Hoc vien chua dang ky lop
+
+  /api/v1/results/students/{studentId}/classes/{classId}:
+    get:
+      summary: Tinh ket qua hoc tap cuoi khoa cua hoc vien
+      tags: [Business - Results]
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: classId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ket qua hoc tap gom chuyen can, diem trung binh va xep loai
+        '404':
+          description: Khong tim thay hoc vien
+        '409':
+          description: Hoc vien chua dang ky lop

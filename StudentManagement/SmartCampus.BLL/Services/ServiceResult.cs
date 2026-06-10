@@ -3,6 +3,7 @@ namespace SmartCampus.BLL.Services;
 public enum ServiceResultType
 {
     Success,
+    BadRequest,
     NotFound,
     Conflict
 }
@@ -30,6 +31,11 @@ public class ServiceResult<T>
     public static ServiceResult<T> NotFound(string message)
     {
         return new ServiceResult<T>(ServiceResultType.NotFound, message, default);
+    }
+
+    public static ServiceResult<T> BadRequest(string message)
+    {
+        return new ServiceResult<T>(ServiceResultType.BadRequest, message, default);
     }
 
     public static ServiceResult<T> Conflict(string message)

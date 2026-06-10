@@ -17,6 +17,11 @@ builder.Services.AddDbContext<N3D4StudentMgmtContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+builder.Services.AddScoped<IGradeRepository, GradeRepository>();
+builder.Services.AddScoped<IGradeService, GradeService>();
+builder.Services.AddScoped<IStudentResultService, StudentResultService>();
 
 var app = builder.Build();
 

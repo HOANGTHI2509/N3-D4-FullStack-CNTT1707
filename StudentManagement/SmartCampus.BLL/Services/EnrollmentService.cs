@@ -1,4 +1,5 @@
 using SmartCampus.BLL.DTOs.Enrollments;
+using SmartCampus.DAL.Constants;
 using SmartCampus.DAL.Models;
 using SmartCampus.DAL.Repositories;
 
@@ -6,9 +7,6 @@ namespace SmartCampus.BLL.Services;
 
 public class EnrollmentService : IEnrollmentService
 {
-    private const string ActiveStatus = "Đang học";
-    private const string CancelledStatus = "Đã hủy";
-
     private readonly IEnrollmentRepository _enrollmentRepository;
 
     public EnrollmentService(IEnrollmentRepository enrollmentRepository)
@@ -21,7 +19,7 @@ public class EnrollmentService : IEnrollmentService
         var student = await _enrollmentRepository.GetStudentByIdAsync(request.StudentId);
         if (student is null)
         {
-            return ServiceResult<EnrollmentResponse>.NotFound("Không tìm thấy học viên.");
+            return ServiceResult<EnrollmentResponse>.NotFound("Khong tim thay hoc vien.");
         }
 
         var existingEnrollment = await _enrollmentRepository.GetByStudentAndClassAsync(
@@ -30,18 +28,18 @@ public class EnrollmentService : IEnrollmentService
 
         if (existingEnrollment is not null)
         {
-            if (!string.Equals(existingEnrollment.Status, CancelledStatus, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(existingEnrollment.Status, EnrollmentStatuses.Cancelled, StringComparison.OrdinalIgnoreCase))
             {
-                return ServiceResult<EnrollmentResponse>.Conflict("Học viên đã đăng ký lớp này.");
+                return ServiceResult<EnrollmentResponse>.Conflict("Hoc vien da dang ky lop nay.");
             }
 
-            existingEnrollment.Status = ActiveStatus;
+            existingEnrollment.Status = EnrollmentStatuses.Active;
             existingEnrollment.EnrollmentDate = DateTime.UtcNow;
             await _enrollmentRepository.SaveChangesAsync();
 
             return ServiceResult<EnrollmentResponse>.Success(
                 MapEnrollment(existingEnrollment),
-                "Đăng ký lại lớp học thành công.");
+                "Dang ky lai lop hoc thanh cong.");
         }
 
         var enrollment = new Enrollment
@@ -49,7 +47,7 @@ public class EnrollmentService : IEnrollmentService
             StudentId = request.StudentId,
             ClassId = request.ClassId,
             EnrollmentDate = DateTime.UtcNow,
-            Status = ActiveStatus
+            Status = EnrollmentStatuses.Active
         };
 
         await _enrollmentRepository.AddAsync(enrollment);
@@ -57,7 +55,7 @@ public class EnrollmentService : IEnrollmentService
 
         return ServiceResult<EnrollmentResponse>.Success(
             MapEnrollment(enrollment),
-            "Đăng ký lớp học thành công.");
+            "Dang ky lop hoc thanh cong.");
     }
 
     public async Task<ServiceResult<EnrollmentResponse>> CancelAsync(int enrollmentId)
@@ -65,20 +63,20 @@ public class EnrollmentService : IEnrollmentService
         var enrollment = await _enrollmentRepository.GetByIdAsync(enrollmentId);
         if (enrollment is null)
         {
-            return ServiceResult<EnrollmentResponse>.NotFound("Không tìm thấy đăng ký lớp học.");
+            return ServiceResult<EnrollmentResponse>.NotFound("Khong tim thay dang ky lop hoc.");
         }
 
-        if (string.Equals(enrollment.Status, CancelledStatus, StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(enrollment.Status, EnrollmentStatuses.Cancelled, StringComparison.OrdinalIgnoreCase))
         {
-            return ServiceResult<EnrollmentResponse>.Conflict("Đăng ký lớp học đã được hủy trước đó.");
+            return ServiceResult<EnrollmentResponse>.Conflict("Dang ky lop hoc da duoc huy truoc do.");
         }
 
-        enrollment.Status = CancelledStatus;
+        enrollment.Status = EnrollmentStatuses.Cancelled;
         await _enrollmentRepository.SaveChangesAsync();
 
         return ServiceResult<EnrollmentResponse>.Success(
             MapEnrollment(enrollment),
-            "Hủy đăng ký lớp học thành công.");
+            "Huy dang ky lop hoc thanh cong.");
     }
 
     public async Task<IReadOnlyList<ClassStudentResponse>> GetStudentsByClassIdAsync(int classId)
