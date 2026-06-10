@@ -13,6 +13,8 @@ public interface IEnrollmentRepository
     Task<IReadOnlyList<Enrollment>> GetByClassIdAsync(int classId);
 
     Task AddAsync(Enrollment enrollment);
+    
+    void Update(Enrollment enrollment);
 
     Task SaveChangesAsync();
 }

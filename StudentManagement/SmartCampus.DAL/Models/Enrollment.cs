@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace SmartCampus.DAL.Models;
@@ -14,6 +14,10 @@ public partial class Enrollment
     public DateTime? EnrollmentDate { get; set; }
 
     public string? Status { get; set; }
+
+    public decimal? AttendancePercentage { get; set; }
+
+    public string? FinalResult { get; set; }
 
     public virtual Student Student { get; set; } = null!;
 }

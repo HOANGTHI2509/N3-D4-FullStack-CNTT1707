@@ -31,7 +31,8 @@ CREATE TABLE Students (
     Major NVARCHAR(100),
     Status NVARCHAR(50) DEFAULT N'Đang học',
     CreatedAt DATETIME DEFAULT GETDATE(),
-    UpdatedAt DATETIME DEFAULT GETDATE()
+    UpdatedAt DATETIME DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0
 );
 GO
 
@@ -42,6 +43,8 @@ CREATE TABLE Enrollments (
     ClassId INT NOT NULL,                      -- Lưu External ID từ Service của Nhóm 1 (Course & Schedule)
     EnrollmentDate DATETIME DEFAULT GETDATE(),
     Status NVARCHAR(50) DEFAULT N'Đang học',
+    AttendancePercentage DECIMAL(5,2) DEFAULT 0.0,
+    FinalResult NVARCHAR(50),
     
     FOREIGN KEY (StudentId) REFERENCES Students(Id),
     CONSTRAINT UC_Student_Class UNIQUE(StudentId, ClassId) 
