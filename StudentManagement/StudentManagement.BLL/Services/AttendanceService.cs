@@ -87,6 +87,7 @@ public class AttendanceService : IAttendanceService
 
         attendance.Status = request.Status;
         attendance.Note = request.Note;
+        attendance.UpdatedAt = DateTime.UtcNow;
 
         _attendanceRepository.Update(attendance);
         await _attendanceRepository.SaveChangesAsync();

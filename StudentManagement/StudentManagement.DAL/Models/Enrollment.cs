@@ -19,6 +19,10 @@ public partial class Enrollment
 
     public string? FinalResult { get; set; }
 
+    public DateTime? CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
     public virtual Student Student { get; set; } = null!;
 }
 

@@ -97,8 +97,8 @@ public class GradeService : IGradeService
         var midterm = allGrades.FirstOrDefault(g => g.GradeType == "MidTerm");
         var finalterm = allGrades.FirstOrDefault(g => g.GradeType == "FinalTerm");
         
-        if (midterm != null) { midterm.Score = request.MidTermScore; _gradeRepository.Update(midterm); }
-        if (finalterm != null) { finalterm.Score = request.FinalTermScore; _gradeRepository.Update(finalterm); }
+        if (midterm != null) { midterm.Score = request.MidTermScore; midterm.UpdatedAt = DateTime.UtcNow; _gradeRepository.Update(midterm); }
+        if (finalterm != null) { finalterm.Score = request.FinalTermScore; finalterm.UpdatedAt = DateTime.UtcNow; _gradeRepository.Update(finalterm); }
 
         await _gradeRepository.SaveChangesAsync();
         return ServiceResult<bool>.Success(true, "Cập nhật điểm thành công.");
