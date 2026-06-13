@@ -15,7 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StudentManagement.BLL\StudentManagement.BLL.csproj" />
+    <ProjectReference Include="..\StudentManagement.Application\StudentManagement.Application.csproj" />
+    <ProjectReference Include="..\StudentManagement.Infrastructure\StudentManagement.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
