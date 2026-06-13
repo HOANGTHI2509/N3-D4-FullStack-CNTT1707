@@ -11,6 +11,7 @@ public interface IStudentRepository
     Task<Student?> GetByIdentityCardAsync(string idCard);
     Task AddAsync(Student student);
     void Update(Student student);
+    void Delete(Student student);
     Task SaveChangesAsync();
 }
 

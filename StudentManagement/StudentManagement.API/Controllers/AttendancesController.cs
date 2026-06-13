@@ -84,7 +84,7 @@ public class AttendancesController : ControllerBase
         try
         {
             var result = await _attendanceService.GetAttendancesByClassAsync(classId);
-            return Ok(ApiResponse<List<StudentAttendanceResponse>>.Ok(result.Data, result.Message));
+            return Ok(ApiResponse<List<StudentAttendanceResponse>>.Ok(result.Data!, result.Message));
         }
         catch (Exception ex)
         {
@@ -98,7 +98,7 @@ public class AttendancesController : ControllerBase
         try
         {
             var result = await _attendanceService.GetAttendancesByStudentAndClassAsync(studentId, classId);
-            return Ok(ApiResponse<List<StudentAttendanceResponse>>.Ok(result.Data, result.Message));
+            return Ok(ApiResponse<List<StudentAttendanceResponse>>.Ok(result.Data!, result.Message));
         }
         catch (Exception ex)
         {
@@ -112,7 +112,7 @@ public class AttendancesController : ControllerBase
         try
         {
             var result = await _attendanceService.GetAttendanceSummaryAsync(studentId, classId);
-            return Ok(ApiResponse<AttendanceSummaryResponse>.Ok(result.Data, result.Message));
+            return Ok(ApiResponse<AttendanceSummaryResponse>.Ok(result.Data!, result.Message));
         }
         catch (Exception ex)
         {

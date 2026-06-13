@@ -83,7 +83,7 @@ public class GradesController : ControllerBase
         try
         {
             var result = await _gradeService.GetGradesByClassAsync(classId);
-            return Ok(ApiResponse<List<StudentGradeResponse>>.Ok(result.Data, result.Message));
+            return Ok(ApiResponse<List<StudentGradeResponse>>.Ok(result.Data!, result.Message));
         }
         catch (Exception ex)
         {
@@ -97,7 +97,7 @@ public class GradesController : ControllerBase
         try
         {
             var result = await _gradeService.GetStudentGradeAsync(studentId, classId);
-            return Ok(ApiResponse<StudentGradeResponse>.Ok(result.Data, result.Message));
+            return Ok(ApiResponse<StudentGradeResponse>.Ok(result.Data!, result.Message));
         }
         catch (Exception ex)
         {

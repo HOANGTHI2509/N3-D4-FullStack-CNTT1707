@@ -37,7 +37,7 @@ services:
   api:
     build: 
       context: ./StudentManagement
-      dockerfile: SmartCampus/Dockerfile  # Trỏ đích danh vào file Dockerfile
+      dockerfile: StudentManagement.API/Dockerfile  # Trỏ đích danh vào file Dockerfile
     container_name: smartcampus_api
     depends_on:
       - db
