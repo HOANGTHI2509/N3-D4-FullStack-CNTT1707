@@ -1,0 +1,20 @@
+using StudentManagement.Domain.Entities;
+using StudentManagement.Application.Interfaces;
+using StudentManagement.Application.DTOs;
+using StudentManagement.Domain.Entities;
+
+namespace StudentManagement.Application.Interfaces;
+
+public interface IStudentRepository
+{
+    Task<IReadOnlyList<Student>> GetPagedAsync(int page, int pageSize, string? searchTerm);
+    Task<int> GetTotalCountAsync(string? searchTerm);
+    Task<Student?> GetByIdAsync(int id);
+    Task<Student?> GetByStudentCodeAsync(string studentCode);
+    Task<Student?> GetByIdentityCardAsync(string idCard);
+    Task AddAsync(Student student);
+    void Update(Student student);
+    void Delete(Student student);
+    Task SaveChangesAsync();
+}
+

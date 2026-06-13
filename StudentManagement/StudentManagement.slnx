@@ -1,7 +1,7 @@
 <Solution>
-  <Project Path="StudentManagement.BLL.Tests/StudentManagement.BLL.Tests.csproj" />
-  <Project Path="StudentManagement.BLL/StudentManagement.BLL.csproj" />
-  <Project Path="StudentManagement.DAL/StudentManagement.DAL.csproj" />
   <Project Path="StudentManagement.API/StudentManagement.API.csproj" />
+  <Project Path="StudentManagement.Application/StudentManagement.Application.csproj" />
+  <Project Path="StudentManagement.Domain/StudentManagement.Domain.csproj" />
+  <Project Path="StudentManagement.Infrastructure/StudentManagement.Infrastructure.csproj" />
 </Solution>
 

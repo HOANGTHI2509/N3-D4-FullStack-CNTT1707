@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using StudentManagement.BLL.DTOs;
-using StudentManagement.BLL.DTOs.Students;
-using StudentManagement.BLL.Services;
+using StudentManagement.Application.DTOs;
+using StudentManagement.Application.DTOs.Students;
+using StudentManagement.Application.Services;
 using StudentManagement.API.Models;
 
 namespace StudentManagement.API.Controllers;

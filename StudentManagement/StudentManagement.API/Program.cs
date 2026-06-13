@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using StudentManagement.BLL.Services;
-using StudentManagement.DAL.Models;
-using StudentManagement.DAL.Repositories;
+using StudentManagement.Application.Services;
+using StudentManagement.Infrastructure.Data;
+using StudentManagement.Domain.Entities;
+using StudentManagement.Infrastructure.Repositories;
+using StudentManagement.Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

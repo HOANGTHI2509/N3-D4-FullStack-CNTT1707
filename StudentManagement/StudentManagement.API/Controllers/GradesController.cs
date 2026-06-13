@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using StudentManagement.BLL.DTOs.Grades;
-using StudentManagement.BLL.Services;
+using StudentManagement.Application.DTOs.Grades;
+using StudentManagement.Application.Services;
 using StudentManagement.API.Models;
 
 namespace StudentManagement.API.Controllers;

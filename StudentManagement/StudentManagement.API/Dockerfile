@@ -4,8 +4,9 @@ WORKDIR /app
 
 # Copy các file .csproj vào đúng cấu trúc thư mục để restore (tận dụng cache)
 COPY ["StudentManagement.API/StudentManagement.API.csproj", "StudentManagement.API/"]
-COPY ["StudentManagement.BLL/StudentManagement.BLL.csproj", "StudentManagement.BLL/"]
-COPY ["StudentManagement.DAL/StudentManagement.DAL.csproj", "StudentManagement.DAL/"]
+COPY ["StudentManagement.Application/StudentManagement.Application.csproj", "StudentManagement.Application/"]
+COPY ["StudentManagement.Domain/StudentManagement.Domain.csproj", "StudentManagement.Domain/"]
+COPY ["StudentManagement.Infrastructure/StudentManagement.Infrastructure.csproj", "StudentManagement.Infrastructure/"]
 RUN dotnet restore "StudentManagement.API/StudentManagement.API.csproj"
 
 # Copy toàn bộ phần code còn lại của cả 3 project
