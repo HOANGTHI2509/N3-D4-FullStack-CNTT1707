@@ -17,13 +17,13 @@ GO
 -- 1. Bảng Students (Hồ sơ học viên)
 CREATE TABLE Students (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    UserId INT UNIQUE,                         -- Lưu External ID từ Service của Nhóm 3 (Payment & Report)
+    UserId INT,                         -- Lưu External ID từ Service của Nhóm 3 (Payment & Report)
     StudentCode VARCHAR(20) UNIQUE NOT NULL,
-    IdentityCardNumber VARCHAR(20) UNIQUE,
+    IdentityCardNumber VARCHAR(20),
     FullName NVARCHAR(100) NOT NULL,
     DateOfBirth DATE NOT NULL,
     Gender NVARCHAR(10),
-    Email VARCHAR(100) UNIQUE,
+    Email VARCHAR(100),
     PhoneNumber VARCHAR(15),
     Address NVARCHAR(255),
     AvatarUrl NVARCHAR(MAX),
@@ -34,6 +34,14 @@ CREATE TABLE Students (
     UpdatedAt DATETIME DEFAULT GETDATE(),
     IsDeleted BIT DEFAULT 0
 );
+GO
+
+SET QUOTED_IDENTIFIER ON;
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX UQ_Students_UserId ON Students(UserId) WHERE UserId IS NOT NULL;
+CREATE UNIQUE NONCLUSTERED INDEX UQ_Students_IdentityCardNumber ON Students(IdentityCardNumber) WHERE IdentityCardNumber IS NOT NULL;
+CREATE UNIQUE NONCLUSTERED INDEX UQ_Students_Email ON Students(Email) WHERE Email IS NOT NULL;
 GO
 
 -- 2. Bảng Enrollments (Học viên đăng ký học lớp nào)
