@@ -1,6 +1,7 @@
 <Solution>
-  <Project Path="SmartCampus.BLL.Tests/SmartCampus.BLL.Tests.csproj" />
-  <Project Path="SmartCampus.BLL/SmartCampus.BLL.csproj" />
-  <Project Path="SmartCampus.DAL/SmartCampus.DAL.csproj" />
-  <Project Path="SmartCampus/SmartCampus.csproj" />
+  <Project Path="StudentManagement.BLL.Tests/StudentManagement.BLL.Tests.csproj" />
+  <Project Path="StudentManagement.BLL/StudentManagement.BLL.csproj" />
+  <Project Path="StudentManagement.DAL/StudentManagement.DAL.csproj" />
+  <Project Path="StudentManagement.API/StudentManagement.API.csproj" />
 </Solution>
+
