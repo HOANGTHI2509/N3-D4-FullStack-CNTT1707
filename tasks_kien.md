@@ -4,9 +4,9 @@
 > **Nhiệm vụ trọng tâm:** Đóng gói ứng dụng, cấu hình Gateway, Auth (Validation) và Hạ tầng Microservices.
 
 ## 1. Môi trường Containerization (Docker)
-- [ ] **Task 1.1:** Viết `Dockerfile` tối ưu cho Backend API (Sử dụng multi-stage build để giảm dung lượng image).
-- [ ] **Task 1.2:** Viết `docker-compose.yml` để chạy đồng thời: SQL Server và Backend API.
-- [ ] **Task 1.3 (Tương lai):** Thêm **RabbitMQ** (Message Broker) vào `docker-compose.yml` để làm hạ tầng giao tiếp giữa các Nhóm.
+- [x] **Task 1.1:** Viết `Dockerfile` tối ưu cho Backend API (Sử dụng multi-stage build để giảm dung lượng image).
+- [x] **Task 1.2:** Viết `docker-compose.yml` để chạy đồng thời: SQL Server và Backend API.
+- [x] **Task 1.3 (Tương lai):** Thêm **RabbitMQ** (Message Broker) vào `docker-compose.yml` để làm hạ tầng giao tiếp giữa các Nhóm.
 
 ## 2. Bảo mật và Xác thực (JWT Validation)
 *Lưu ý quan trọng: Nhóm 3 (Payment & Report) đảm nhận cấp phát JWT. Nhóm 2 chỉ làm phần Validate.*
