@@ -12,9 +12,34 @@ public class AttendanceRepository : IAttendanceRepository
         _context = context;
     }
 
+    public async Task AddAsync(Attendance attendance)
+    {
+        await _context.Attendances.AddAsync(attendance);
+    }
+
+    public Task<Attendance?> GetByIdAsync(int id)
+    {
+        return _context.Attendances.FirstOrDefaultAsync(a => a.Id == id);
+    }
+
+    public void Update(Attendance attendance)
+    {
+        _context.Attendances.Update(attendance);
+    }
+
     public async Task AddRangeAsync(IEnumerable<Attendance> attendances)
     {
         await _context.Attendances.AddRangeAsync(attendances);
+    }
+
+    public Task<List<Attendance>> GetByClassAsync(int classId)
+    {
+        return _context.Attendances.Where(a => a.ClassId == classId).ToListAsync();
+    }
+
+    public Task<List<Attendance>> GetByStudentAndClassAsync(int studentId, int classId)
+    {
+        return _context.Attendances.Where(a => a.ClassId == classId && a.StudentId == studentId).ToListAsync();
     }
 
     public Task<int> GetTotalSessionsAsync(int classId, int studentId)

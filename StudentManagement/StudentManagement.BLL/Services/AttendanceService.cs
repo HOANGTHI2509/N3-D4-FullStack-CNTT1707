@@ -60,5 +60,120 @@ public class AttendanceService : IAttendanceService
 
         return ServiceResult<bool>.Success(true, "Điểm danh và cập nhật phần trăm thành công.");
     }
+
+    public async Task<ServiceResult<bool>> CreateAttendanceAsync(CreateAttendanceRequest request)
+    {
+        var attendance = new Attendance
+        {
+            StudentId = request.StudentId,
+            ClassId = request.ClassId,
+            AttendanceDate = request.AttendanceDate,
+            Status = request.Status,
+            Note = request.Note
+        };
+
+        await _attendanceRepository.AddAsync(attendance);
+        await _attendanceRepository.SaveChangesAsync();
+
+        await RecalculateAttendancePercentageAsync(request.ClassId, request.StudentId);
+
+        return ServiceResult<bool>.Success(true, "Thêm điểm danh thành công.");
+    }
+
+    public async Task<ServiceResult<bool>> UpdateAttendanceAsync(int id, UpdateAttendanceRequest request)
+    {
+        var attendance = await _attendanceRepository.GetByIdAsync(id);
+        if (attendance == null) return ServiceResult<bool>.NotFound("Không tìm thấy dữ liệu điểm danh.");
+
+        attendance.Status = request.Status;
+        attendance.Note = request.Note;
+
+        _attendanceRepository.Update(attendance);
+        await _attendanceRepository.SaveChangesAsync();
+
+        await RecalculateAttendancePercentageAsync(attendance.ClassId, attendance.StudentId);
+
+        return ServiceResult<bool>.Success(true, "Cập nhật điểm danh thành công.");
+    }
+
+    public async Task<ServiceResult<List<StudentAttendanceResponse>>> GetAttendancesByClassAsync(int classId)
+    {
+        var attendances = await _attendanceRepository.GetByClassAsync(classId);
+        var result = new List<StudentAttendanceResponse>();
+
+        foreach (var a in attendances)
+        {
+            var student = await _enrollmentRepository.GetStudentByIdAsync(a.StudentId);
+            result.Add(new StudentAttendanceResponse
+            {
+                Id = a.Id,
+                StudentId = a.StudentId,
+                ClassId = a.ClassId,
+                StudentName = student?.FullName ?? "Unknown",
+                AttendanceDate = a.AttendanceDate,
+                Status = a.Status,
+                Note = a.Note
+            });
+        }
+
+        return ServiceResult<List<StudentAttendanceResponse>>.Success(result, "Lấy danh sách thành công.");
+    }
+
+    public async Task<ServiceResult<List<StudentAttendanceResponse>>> GetAttendancesByStudentAndClassAsync(int studentId, int classId)
+    {
+        var attendances = await _attendanceRepository.GetByStudentAndClassAsync(studentId, classId);
+        var student = await _enrollmentRepository.GetStudentByIdAsync(studentId);
+        var result = attendances.Select(a => new StudentAttendanceResponse
+        {
+            Id = a.Id,
+            StudentId = a.StudentId,
+            ClassId = a.ClassId,
+            StudentName = student?.FullName ?? "Unknown",
+            AttendanceDate = a.AttendanceDate,
+            Status = a.Status,
+            Note = a.Note
+        }).ToList();
+
+        return ServiceResult<List<StudentAttendanceResponse>>.Success(result, "Lấy danh sách điểm danh thành công.");
+    }
+
+    public async Task<ServiceResult<AttendanceSummaryResponse>> GetAttendanceSummaryAsync(int studentId, int classId)
+    {
+        var student = await _enrollmentRepository.GetStudentByIdAsync(studentId);
+        var total = await _attendanceRepository.GetTotalSessionsAsync(classId, studentId);
+        var present = await _attendanceRepository.GetPresentSessionsAsync(classId, studentId);
+        var percentage = total > 0 ? Math.Round((decimal)present / total * 100, 2) : 0;
+
+        var response = new AttendanceSummaryResponse
+        {
+            StudentId = studentId,
+            ClassId = classId,
+            StudentName = student?.FullName ?? "Unknown",
+            TotalSessions = total,
+            PresentSessions = present,
+            AttendancePercentage = percentage
+        };
+
+        return ServiceResult<AttendanceSummaryResponse>.Success(response, "Lấy tổng kết thành công.");
+    }
+
+    private async Task RecalculateAttendancePercentageAsync(int classId, int studentId)
+    {
+        var totalSessions = await _attendanceRepository.GetTotalSessionsAsync(classId, studentId);
+        var presentSessions = await _attendanceRepository.GetPresentSessionsAsync(classId, studentId);
+
+        if (totalSessions > 0)
+        {
+            decimal percentage = (decimal)presentSessions / totalSessions * 100;
+
+            var enrollment = await _enrollmentRepository.GetByStudentAndClassAsync(studentId, classId);
+            if (enrollment != null)
+            {
+                enrollment.AttendancePercentage = Math.Round(percentage, 2);
+                _enrollmentRepository.Update(enrollment);
+                await _enrollmentRepository.SaveChangesAsync();
+            }
+        }
+    }
 }
 

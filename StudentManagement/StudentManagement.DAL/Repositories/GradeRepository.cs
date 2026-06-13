@@ -12,9 +12,29 @@ public class GradeRepository : IGradeRepository
         _context = context;
     }
 
+    public async Task AddAsync(Grade grade)
+    {
+        await _context.Grades.AddAsync(grade);
+    }
+
+    public Task<Grade?> GetByIdAsync(int id)
+    {
+        return _context.Grades.FirstOrDefaultAsync(g => g.Id == id);
+    }
+
+    public void Update(Grade grade)
+    {
+        _context.Grades.Update(grade);
+    }
+
     public async Task AddRangeAsync(IEnumerable<Grade> grades)
     {
         await _context.Grades.AddRangeAsync(grades);
+    }
+
+    public Task<List<Grade>> GetByClassAsync(int classId)
+    {
+        return _context.Grades.Where(g => g.ClassId == classId).ToListAsync();
     }
 
     public Task<List<Grade>> GetByStudentAndClassAsync(int studentId, int classId)

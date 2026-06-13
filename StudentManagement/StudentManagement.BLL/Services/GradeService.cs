@@ -72,5 +72,92 @@ public class GradeService : IGradeService
 
         return ServiceResult<bool>.Success(true, "Nhập điểm và tính kết quả thành công.");
     }
+
+    public async Task<ServiceResult<bool>> CreateGradeAsync(CreateGradeRequest request)
+    {
+        var existingGrades = await _gradeRepository.GetByStudentAndClassAsync(request.StudentId, request.ClassId);
+        if (existingGrades.Any())
+        {
+            _gradeRepository.RemoveRange(existingGrades);
+        }
+
+        await _gradeRepository.AddAsync(new Grade { StudentId = request.StudentId, ClassId = request.ClassId, GradeType = "MidTerm", Score = request.MidTermScore });
+        await _gradeRepository.AddAsync(new Grade { StudentId = request.StudentId, ClassId = request.ClassId, GradeType = "FinalTerm", Score = request.FinalTermScore });
+
+        await _gradeRepository.SaveChangesAsync();
+        return ServiceResult<bool>.Success(true, "Thêm điểm thành công.");
+    }
+
+    public async Task<ServiceResult<bool>> UpdateGradeAsync(int id, UpdateGradeRequest request)
+    {
+        var grade = await _gradeRepository.GetByIdAsync(id);
+        if (grade == null) return ServiceResult<bool>.NotFound("Không tìm thấy bảng điểm.");
+        
+        var allGrades = await _gradeRepository.GetByStudentAndClassAsync(grade.StudentId, grade.ClassId);
+        var midterm = allGrades.FirstOrDefault(g => g.GradeType == "MidTerm");
+        var finalterm = allGrades.FirstOrDefault(g => g.GradeType == "FinalTerm");
+        
+        if (midterm != null) { midterm.Score = request.MidTermScore; _gradeRepository.Update(midterm); }
+        if (finalterm != null) { finalterm.Score = request.FinalTermScore; _gradeRepository.Update(finalterm); }
+
+        await _gradeRepository.SaveChangesAsync();
+        return ServiceResult<bool>.Success(true, "Cập nhật điểm thành công.");
+    }
+
+    public async Task<ServiceResult<List<StudentGradeResponse>>> GetGradesByClassAsync(int classId)
+    {
+        var grades = await _gradeRepository.GetByClassAsync(classId);
+        var enrollments = await _enrollmentRepository.GetByClassIdAsync(classId);
+        
+        var grouped = grades.GroupBy(g => g.StudentId).ToList();
+        var result = new List<StudentGradeResponse>();
+        foreach (var group in grouped)
+        {
+            var studentId = group.Key;
+            var student = await _enrollmentRepository.GetStudentByIdAsync(studentId);
+            var midterm = group.FirstOrDefault(g => g.GradeType == "MidTerm")?.Score ?? 0;
+            var final = group.FirstOrDefault(g => g.GradeType == "FinalTerm")?.Score ?? 0;
+            var enrollment = enrollments.FirstOrDefault(e => e.StudentId == studentId);
+            var attendance = enrollment?.AttendancePercentage ?? 0;
+            
+            result.Add(new StudentGradeResponse
+            {
+                StudentId = studentId,
+                ClassId = classId,
+                StudentName = student?.FullName ?? "Unknown",
+                ClassName = $"Lớp {classId}",
+                Scores = new GradeScores { Attendance = attendance, Midterm = midterm, Final = final, Average = (midterm * 0.3m) + (final * 0.7m) }
+            });
+        }
+        return ServiceResult<List<StudentGradeResponse>>.Success(result, "Lấy danh sách điểm thành công.");
+    }
+
+    public async Task<ServiceResult<StudentGradeResponse>> GetStudentGradeAsync(int studentId, int classId)
+    {
+        var grades = await _gradeRepository.GetByStudentAndClassAsync(studentId, classId);
+        var student = await _enrollmentRepository.GetStudentByIdAsync(studentId);
+        var enrollment = await _enrollmentRepository.GetByStudentAndClassAsync(studentId, classId);
+
+        var midterm = grades.FirstOrDefault(g => g.GradeType == "MidTerm")?.Score ?? 0;
+        var final = grades.FirstOrDefault(g => g.GradeType == "FinalTerm")?.Score ?? 0;
+        var attendance = enrollment?.AttendancePercentage ?? 0;
+
+        var response = new StudentGradeResponse
+        {
+            StudentId = studentId,
+            ClassId = classId,
+            StudentName = student?.FullName ?? "Unknown",
+            ClassName = $"Lớp {classId}",
+            Scores = new GradeScores
+            {
+                Attendance = attendance,
+                Midterm = midterm,
+                Final = final,
+                Average = (midterm * 0.3m) + (final * 0.7m)
+            }
+        };
+
+        return ServiceResult<StudentGradeResponse>.Success(response, "Lấy điểm thành công.");
+    }
 }
 

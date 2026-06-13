@@ -23,10 +23,18 @@ public class StudentService : IStudentService
         {
             Id = s.Id,
             StudentCode = s.StudentCode,
+            IdentityCardNumber = s.IdentityCardNumber,
             FullName = s.FullName,
+            DateOfBirth = s.DateOfBirth,
+            Gender = s.Gender,
             Email = s.Email,
+            PhoneNumber = s.PhoneNumber,
+            Address = s.Address,
+            AvatarUrl = s.AvatarUrl,
+            EnrollmentDate = s.EnrollmentDate,
+            Major = s.Major,
             Status = s.Status,
-            Major = s.Major
+            CreatedAt = s.CreatedAt
         }).ToList();
 
         var pagedResponse = new PagedResponse<StudentResponse>
@@ -52,11 +60,18 @@ public class StudentService : IStudentService
         {
             Id = student.Id,
             StudentCode = student.StudentCode,
+            IdentityCardNumber = student.IdentityCardNumber,
             FullName = student.FullName,
+            DateOfBirth = student.DateOfBirth,
+            Gender = student.Gender,
             Email = student.Email,
+            PhoneNumber = student.PhoneNumber,
+            Address = student.Address,
+            AvatarUrl = student.AvatarUrl,
+            EnrollmentDate = student.EnrollmentDate,
+            Major = student.Major,
             Status = student.Status,
-            Major = student.Major
-            // Ánh xạ thêm các trường khác
+            CreatedAt = student.CreatedAt
         };
 
         return ServiceResult<StudentResponse>.Success(response, "Thành công");
@@ -108,10 +123,18 @@ public class StudentService : IStudentService
         {
             Id = newStudent.Id,
             StudentCode = newStudent.StudentCode,
+            IdentityCardNumber = newStudent.IdentityCardNumber,
             FullName = newStudent.FullName,
+            DateOfBirth = newStudent.DateOfBirth,
+            Gender = newStudent.Gender,
             Email = newStudent.Email,
+            PhoneNumber = newStudent.PhoneNumber,
+            Address = newStudent.Address,
+            AvatarUrl = newStudent.AvatarUrl,
+            EnrollmentDate = newStudent.EnrollmentDate,
+            Major = newStudent.Major,
             Status = newStudent.Status,
-            Major = newStudent.Major
+            CreatedAt = newStudent.CreatedAt
         };
 
         return ServiceResult<StudentResponse>.Success(response, "Thêm học viên thành công.");
@@ -139,10 +162,18 @@ public class StudentService : IStudentService
         {
             Id = student.Id,
             StudentCode = student.StudentCode,
+            IdentityCardNumber = student.IdentityCardNumber,
             FullName = student.FullName,
+            DateOfBirth = student.DateOfBirth,
+            Gender = student.Gender,
             Email = student.Email,
+            PhoneNumber = student.PhoneNumber,
+            Address = student.Address,
+            AvatarUrl = student.AvatarUrl,
+            EnrollmentDate = student.EnrollmentDate,
+            Major = student.Major,
             Status = student.Status,
-            Major = student.Major
+            CreatedAt = student.CreatedAt
         };
 
         return ServiceResult<StudentResponse>.Success(response, "Cập nhật thành công.");

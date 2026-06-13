@@ -40,27 +40,69 @@ public class GradesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApiResponse<bool>>> CreateGrade([FromBody] object request)
+    public async Task<ActionResult<ApiResponse<bool>>> CreateGrade([FromBody] CreateGradeRequest request)
     {
-        return Ok(ApiResponse<bool>.Ok(true, "Mock data"));
+        try
+        {
+            var result = await _gradeService.CreateGradeAsync(request);
+            return result.Type switch
+            {
+                ServiceResultType.Success => Ok(ApiResponse<bool>.Ok(result.Data, result.Message)),
+                ServiceResultType.Conflict => Conflict(ApiResponse<bool>.Fail(result.Message)),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<bool>.Fail("Lỗi hệ thống."))
+            };
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<bool>.Fail(ex.Message));
+        }
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<ApiResponse<bool>>> UpdateGrade(int id, [FromBody] object request)
+    public async Task<ActionResult<ApiResponse<bool>>> UpdateGrade(int id, [FromBody] UpdateGradeRequest request)
     {
-        return Ok(ApiResponse<bool>.Ok(true, "Mock data"));
+        try
+        {
+            var result = await _gradeService.UpdateGradeAsync(id, request);
+            return result.Type switch
+            {
+                ServiceResultType.Success => Ok(ApiResponse<bool>.Ok(result.Data, result.Message)),
+                ServiceResultType.NotFound => NotFound(ApiResponse<bool>.Fail(result.Message)),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<bool>.Fail("Lỗi hệ thống."))
+            };
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<bool>.Fail(ex.Message));
+        }
     }
 
     [HttpGet("classes/{classId}")]
-    public async Task<ActionResult<ApiResponse<object>>> GetGradesByClass(int classId)
+    public async Task<ActionResult<ApiResponse<List<StudentGradeResponse>>>> GetGradesByClass(int classId)
     {
-        return Ok(ApiResponse<object>.Ok(new { }, "Mock data"));
+        try
+        {
+            var result = await _gradeService.GetGradesByClassAsync(classId);
+            return Ok(ApiResponse<List<StudentGradeResponse>>.Ok(result.Data, result.Message));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<List<StudentGradeResponse>>.Fail(ex.Message));
+        }
     }
 
     [HttpGet("students/{studentId}/classes/{classId}")]
-    public async Task<ActionResult<ApiResponse<object>>> GetGradesByStudentAndClass(int studentId, int classId)
+    public async Task<ActionResult<ApiResponse<StudentGradeResponse>>> GetGradesByStudentAndClass(int studentId, int classId)
     {
-        return Ok(ApiResponse<object>.Ok(new { }, "Mock data"));
+        try
+        {
+            var result = await _gradeService.GetStudentGradeAsync(studentId, classId);
+            return Ok(ApiResponse<StudentGradeResponse>.Ok(result.Data, result.Message));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse<StudentGradeResponse>.Fail(ex.Message));
+        }
     }
 }
 
