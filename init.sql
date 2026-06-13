@@ -53,6 +53,8 @@ CREATE TABLE Enrollments (
     Status NVARCHAR(50) DEFAULT N'Đang học',
     AttendancePercentage DECIMAL(5,2) DEFAULT 0.0,
     FinalResult NVARCHAR(50),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    UpdatedAt DATETIME DEFAULT GETDATE(),
     
     FOREIGN KEY (StudentId) REFERENCES Students(Id),
     CONSTRAINT UC_Student_Class UNIQUE(StudentId, ClassId) 
@@ -67,6 +69,8 @@ CREATE TABLE Attendances (
     AttendanceDate DATE NOT NULL,
     Status NVARCHAR(50) NOT NULL,
     Note NVARCHAR(255),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    UpdatedAt DATETIME DEFAULT GETDATE(),
     
     FOREIGN KEY (StudentId) REFERENCES Students(Id)
 );
@@ -81,6 +85,7 @@ CREATE TABLE Grades (
     Score DECIMAL(5,2) CHECK (Score >= 0 AND Score <= 10),
     Note NVARCHAR(255),
     CreatedAt DATETIME DEFAULT GETDATE(),
+    UpdatedAt DATETIME DEFAULT GETDATE(),
     
     FOREIGN KEY (StudentId) REFERENCES Students(Id)
 );

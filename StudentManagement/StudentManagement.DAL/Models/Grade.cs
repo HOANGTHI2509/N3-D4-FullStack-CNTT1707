@@ -19,6 +19,8 @@ public partial class Grade
 
     public DateTime? CreatedAt { get; set; }
 
+    public DateTime? UpdatedAt { get; set; }
+
     public virtual Student Student { get; set; } = null!;
 }
 

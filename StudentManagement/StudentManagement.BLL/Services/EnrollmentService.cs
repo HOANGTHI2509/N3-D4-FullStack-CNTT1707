@@ -37,6 +37,7 @@ public class EnrollmentService : IEnrollmentService
 
             existingEnrollment.Status = ActiveStatus;
             existingEnrollment.EnrollmentDate = DateTime.UtcNow;
+            existingEnrollment.UpdatedAt = DateTime.UtcNow;
             await _enrollmentRepository.SaveChangesAsync();
 
             return ServiceResult<EnrollmentResponse>.Success(
@@ -74,6 +75,7 @@ public class EnrollmentService : IEnrollmentService
         }
 
         enrollment.Status = CancelledStatus;
+        enrollment.UpdatedAt = DateTime.UtcNow;
         await _enrollmentRepository.SaveChangesAsync();
 
         return ServiceResult<EnrollmentResponse>.Success(

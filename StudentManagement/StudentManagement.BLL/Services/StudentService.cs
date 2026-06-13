@@ -149,9 +149,16 @@ public class StudentService : IStudentService
         }
 
         // Cập nhật thông tin
+        if (request.FullName != null) student.FullName = request.FullName;
+        if (request.IdentityCardNumber != null) student.IdentityCardNumber = request.IdentityCardNumber;
+        if (request.Gender != null) student.Gender = request.Gender;
+        if (request.DateOfBirth != default) student.DateOfBirth = request.DateOfBirth;
         if (request.PhoneNumber != null) student.PhoneNumber = request.PhoneNumber;
         if (request.Address != null) student.Address = request.Address;
         if (request.Email != null) student.Email = request.Email;
+        if (request.AvatarUrl != null) student.AvatarUrl = request.AvatarUrl;
+        if (request.Major != null) student.Major = request.Major;
+        if (request.Status != null) student.Status = request.Status;
         
         student.UpdatedAt = DateTime.UtcNow;
 
@@ -182,20 +189,16 @@ public class StudentService : IStudentService
     public async Task<ServiceResult<bool>> DeleteAsync(int id)
     {
         var student = await _studentRepository.GetByIdAsync(id);
-        if (student == null || student.IsDeleted)
+        if (student == null)
         {
             return ServiceResult<bool>.NotFound($"Không tìm thấy học viên với ID {id}");
         }
 
-        // Xóa mềm
-        student.IsDeleted = true;
-        student.Status = "Inactive";
-        student.UpdatedAt = DateTime.UtcNow;
-
-        _studentRepository.Update(student);
+        // Xóa cứng (Hard Delete)
+        _studentRepository.Delete(student);
         await _studentRepository.SaveChangesAsync();
 
-        return ServiceResult<bool>.Success(true, "Xóa mềm học viên thành công.");
+        return ServiceResult<bool>.Success(true, "Xóa học viên vĩnh viễn thành công.");
     }
 }
 
