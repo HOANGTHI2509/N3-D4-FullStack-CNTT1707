@@ -65,6 +65,11 @@ public class StudentRepository : IStudentRepository
         _context.Students.Update(student);
     }
 
+    public void Delete(Student student)
+    {
+        _context.Students.Remove(student);
+    }
+
 
 
     public async Task SaveChangesAsync()
